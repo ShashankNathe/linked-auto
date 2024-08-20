@@ -51,23 +51,80 @@ import { redirect } from "next/navigation";
 // import { logout } from "../actions/authActions";
 
 const layout = ({ children }) => {
+  // const handleLogout = async () => {
+  //   const res = await fetch("/api/auth/logout", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //   });
+
+  //   const data = await res.json();
+
+  //   if (res.ok) {
+  //     // router.push("/auth/login");
+  //     redirect("/auth/login");
+  //   } else {
+  //     setError(data.message);
+  //   }
+  // };
+
+  // const logout = async () => {
+  //   "use server";
+  //   const res = await fetch("/api/auth/logout", {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //   });
+
+  //   const data = await res.json();
+
+  //   if (res.ok) {
+  //     // router.push("/auth/login");
+  //     redirect("/auth/login");
+  //   } else {
+  //     setError(data.message);
+  //   }
+  // };
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setError(null);
+
+  //   const res = await fetch("/api/auth/login", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({ email, password }),
+  //   });
+
+  //   const data = await res.json();
+
+  //   if (res.ok) {
+  //     localStorage.setItem("token", data.token);
+  //     router.push("/dashboard");
+  //   } else {
+  //     setError(data.message);
+  //   }
+  // };
+
   const handleLogout = async () => {
-    const res = await fetch("/api/auth/logout", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    const data = await res.json();
-
-    if (res.ok) {
-      // router.push("/auth/login");
-      redirect("/auth/login");
-    } else {
-      setError(data.message);
+    try {
+      const response = await fetch("/api/auth/logout");
+      if (response.ok) {
+        // Redirect or handle successful logout
+        router.push("/auth/login");
+      } else {
+        // Handle error
+        console.error("Failed to log out");
+      }
+    } catch (error) {
+      console.error("Error during logout:", error);
     }
   };
+
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
       <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
@@ -135,10 +192,10 @@ const layout = ({ children }) => {
               </DropdownMenuItem>
               {/* <DropdownMenuItem>Support</DropdownMenuItem> */}
               <DropdownMenuSeparator />
-              {/* <form action={logout}> */}
-              {/* <Button> */}
-              <DropdownMenuItem>Logout</DropdownMenuItem>
-              {/* </Button> */}
+              {/* <form onSubmit={()=>handleLogout()}> */}
+              <Link href={"/api/auth/logout"}>
+                <DropdownMenuItem>Logout</DropdownMenuItem>
+              </Link>
               {/* </form> */}
             </DropdownMenuContent>
           </DropdownMenu>
