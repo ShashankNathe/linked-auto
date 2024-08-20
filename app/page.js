@@ -6,7 +6,7 @@ export default function Home() {
       <h1>Welcome to LinkedIn Post Scheduler</h1>
       <p>Schedule your LinkedIn posts easily and efficiently.</p>
 
-      <Link href="/auth/login">Login</Link>
+      <Link href="/auth/login">Logn</Link>
       <Link href="/auth/register">Register</Link>
     </div>
   );
