@@ -1,10 +1,22 @@
 import Link from "next/link";
 import { Linkedin } from "lucide-react";
 import { cookies } from "next/headers";
+import { jwtVerify } from "jose";
 
-export default function Home() {
+export default async function Home() {
   const cookieStore = cookies();
-  const token = cookieStore.get("token");
+  let token = cookieStore.get("token");
+
+  if (token && token.value) {
+    try {
+      await jwtVerify(token.value, new TextEncoder().encode(process.env.JWT_SECRET));
+    } catch (err) {
+      token = null;
+    }
+  } else {
+    token = null;
+  }
+
   return (
     <div>
       <div className="flex min-h-screen w-full flex-col">

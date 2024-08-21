@@ -1,26 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
-import {
-  ChevronLeft,
-  ChevronRight,
-  Copy,
-  CreditCard,
-  File,
-  Home,
-  LineChart,
-  ListFilter,
-  MoreVertical,
-  Package,
-  Package2,
-  PanelLeft,
-  Search,
-  Settings,
-  ShoppingCart,
-  Truck,
-  Users2,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight, Copy, CreditCard, File, ListFilter, MoreVertical, Truck } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -32,59 +12,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
 import { Pagination, PaginationContent, PaginationItem } from "@/components/ui/pagination";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { getUser } from "@/lib/getUser";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
-import { logout } from "../actions/authActions";
 export default async function Dashboard() {
-  // const handleLogout = async () => {
-  //   const cookieStore = cookies();
-  //   const token = cookieStore.get("token");
-  //   // console.log("token", token);
-  //   if (!token) {
-  //     redirect("/auth/login");
-  //   }
-  //   let user = await getUser(token.value);
-  //   if (!user) {
-  //     redirect("/auth/login");
-  //   }
-  //   // delete the cookies and redirect to login page
-  //   cookieStore.delete("token", { path: "/" });
-  //   redirect("/auth/login");
-  // };
-  // handleLogout();
-  // console.log(data);
-  // if (data) {
-  //   redirect("/auth/login");
-  // }
-  // await logout();
-  // const response = await fetch(process.env.BASEURL + "/api/auth/logout", {
-  //   method: "POST",
-  //   credentials: "include", // Ensure credentials are included in the fetch request
-  // });
-  // const data = await response.json();
-  // console.log("data", data);
-
-  // const cookieStore = cookies();
-  // const token = cookieStore.get("token");
-  // console.log("dashboard token", token);
-
-  // if (!token) {
-  //   redirect("/auth/login");
-  // }
-  // let user = await getUser(token.value);
-  // if (!user) {
-  //   redirect("/auth/login");
-  // }
-
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
       <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">

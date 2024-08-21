@@ -7,16 +7,18 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
+import { useToast } from "@/components/ui/use-toast";
 
 export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { toast } = useToast();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
+    setLoading(true);
 
     const res = await fetch("/api/auth/register", {
       method: "POST",
@@ -31,12 +33,17 @@ export default function Register() {
     if (res.ok) {
       router.push("/auth/login");
     } else {
-      setError(data.message);
+      toast({
+        title: "Registration failed",
+        description: data.message,
+        variant: "destructive",
+      });
     }
+    setLoading(false);
   };
 
   return (
-    <div className="flex justify-center items-center h-screen">
+    <div className="flex justify-center items-center flex-col">
       <Card className="w-11/12 sm:w-[350px]">
         <CardHeader>
           <CardTitle>Register</CardTitle>
@@ -59,10 +66,11 @@ export default function Register() {
             </CardDescription>
           </CardContent>
           <CardFooter className="flex justify-end">
-            <Button type="submit">Register</Button>
+            <Button type="submit" disabled={loading}>
+              {loading ? "Registering..." : "Register"}
+            </Button>
           </CardFooter>
         </form>
-        {error && <p>{error}</p>}
       </Card>
     </div>
   );

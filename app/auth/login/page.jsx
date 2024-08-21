@@ -7,16 +7,18 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
+import { useToast } from "@/components/ui/use-toast";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { toast } = useToast();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
+    setLoading(true);
 
     const res = await fetch("/api/auth/login", {
       method: "POST",
@@ -32,12 +34,17 @@ export default function Login() {
       localStorage.setItem("token", data.token);
       router.push("/dashboard");
     } else {
-      setError(data.message);
+      toast({
+        title: "Login failed",
+        description: data.message,
+        variant: "destructive",
+      });
     }
+    setLoading(false);
   };
 
   return (
-    <div className="flex justify-center items-center h-screen">
+    <div className="flex justify-center items-center">
       <Card className="w-11/12 sm:w-[350px]">
         <CardHeader>
           <CardTitle>Login</CardTitle>
@@ -60,10 +67,11 @@ export default function Login() {
             </CardDescription>
           </CardContent>
           <CardFooter className="flex justify-end">
-            <Button type="submit">Login</Button>
+            <Button type="submit" disabled={loading}>
+              {loading ? "Logging in.." : "Login"}
+            </Button>
           </CardFooter>
         </form>
-        {error && <p>{error}</p>}
       </Card>
     </div>
   );
