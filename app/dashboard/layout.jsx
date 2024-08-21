@@ -1,130 +1,14 @@
 import React from "react";
-import Image from "next/image";
 import Link from "next/link";
-import {
-  CalendarCheck,
-  ChevronLeft,
-  ChevronRight,
-  Copy,
-  CreditCard,
-  File,
-  Home,
-  LineChart,
-  Linkedin,
-  ListFilter,
-  MoreVertical,
-  Package,
-  Package2,
-  PanelLeft,
-  Search,
-  Settings,
-  ShoppingCart,
-  Truck,
-  User,
-  Users2,
-} from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
+import { CalendarCheck, Home, Linkedin, PanelLeft, Settings, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
-import { Pagination, PaginationContent, PaginationItem } from "@/components/ui/pagination";
-import { Progress } from "@/components/ui/progress";
-import { Separator } from "@/components/ui/separator";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import ThemeBtn from "./ThemeBtn";
 import DynamicBreadCrumbs from "./DynamicBreadCrumbs";
 import DynamicSideIcons from "./DynamicSideIcons";
-import { redirect } from "next/navigation";
-// import { logout } from "../actions/authActions";
 
 const layout = ({ children }) => {
-  // const handleLogout = async () => {
-  //   const res = await fetch("/api/auth/logout", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //   });
-
-  //   const data = await res.json();
-
-  //   if (res.ok) {
-  //     // router.push("/auth/login");
-  //     redirect("/auth/login");
-  //   } else {
-  //     setError(data.message);
-  //   }
-  // };
-
-  // const logout = async () => {
-  //   "use server";
-  //   const res = await fetch("/api/auth/logout", {
-  //     method: "GET",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //   });
-
-  //   const data = await res.json();
-
-  //   if (res.ok) {
-  //     // router.push("/auth/login");
-  //     redirect("/auth/login");
-  //   } else {
-  //     setError(data.message);
-  //   }
-  // };
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   setError(null);
-
-  //   const res = await fetch("/api/auth/login", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({ email, password }),
-  //   });
-
-  //   const data = await res.json();
-
-  //   if (res.ok) {
-  //     localStorage.setItem("token", data.token);
-  //     router.push("/dashboard");
-  //   } else {
-  //     setError(data.message);
-  //   }
-  // };
-
-  const handleLogout = async () => {
-    try {
-      const response = await fetch("/api/auth/logout");
-      if (response.ok) {
-        // Redirect or handle successful logout
-        router.push("/auth/login");
-      } else {
-        // Handle error
-        console.error("Failed to log out");
-      }
-    } catch (error) {
-      console.error("Error during logout:", error);
-    }
-  };
-
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
       <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
