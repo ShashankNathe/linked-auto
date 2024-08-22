@@ -1,11 +1,9 @@
 import { generateAccessToken, getProfileData } from "@/app/actions/linkedinActions";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getUser } from "@/lib/getUser";
-import { connectToDatabase } from "@/lib/mongodb";
-import { ChevronLeft, Upload, User } from "lucide-react";
+import { User } from "lucide-react";
 import { cookies } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";

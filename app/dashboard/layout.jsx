@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import Link from "next/link";
 import { CalendarCheck, Home, Linkedin, PanelLeft, Settings, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -84,8 +84,7 @@ const layout = ({ children }) => {
             </DropdownMenuContent>
           </DropdownMenu>
         </header>
-
-        {children}
+        <Suspense fallback={<div>Loading</div>}>{children}</Suspense>
       </div>
     </div>
   );
