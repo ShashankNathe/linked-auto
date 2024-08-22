@@ -8,7 +8,6 @@ export async function middleware(req) {
   if (token) {
     try {
       const { payload } = await jwtVerify(token, new TextEncoder().encode(process.env.JWT_SECRET));
-
       if (path === "/auth/login" || path === "/auth/register") {
         return NextResponse.redirect(new URL("/dashboard", req.url));
       }

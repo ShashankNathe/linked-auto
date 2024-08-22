@@ -4,7 +4,8 @@ import { connectToDatabase } from "@/lib/mongodb";
 
 export const generateAccessToken = async (code, user) => {
   const { db } = await connectToDatabase();
-  let response = await fetch("https://www.linkedin.com/oauth/v2/accessToken", {
+
+  let tokenResponse = await fetch("https://www.linkedin.com/oauth/v2/accessToken", {
     method: "POST",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
@@ -17,14 +18,33 @@ export const generateAccessToken = async (code, user) => {
       client_secret: process.env.LINKEDIN_CLIENT_SECRET || "",
     }),
   });
-  let data = await response.json();
-  data.user_id = user._id;
-  data.createdAt = new Date();
-  await db.collection("user_properties").insertOne(data);
-  return data;
+
+  let tokenData = await tokenResponse.json();
+
+  let profileResponse = await fetch("https://api.linkedin.com/v2/me", {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${tokenData.access_token}`,
+    },
+  });
+
+  let profileData = await profileResponse.json();
+  const linkedinURN = `urn:li:person:${profileData.id}`;
+
+  const dataToSave = {
+    user_id: user._id,
+    access_token: tokenData.access_token,
+    expires_in: tokenData.expires_in,
+    linkedin_urn: linkedinURN,
+    createdAt: new Date(),
+  };
+
+  await db.collection("user_properties").insertOne(dataToSave);
+
+  return dataToSave;
 };
 
-const getAccessToken = async (user) => {
+export const getAccessToken = async (user) => {
   const { db } = await connectToDatabase();
   const userProperties = await db.collection("user_properties").find({ user_id: user._id }).sort({ createdAt: -1 }).limit(1).toArray();
   if (!userProperties || !userProperties[0]) return null;

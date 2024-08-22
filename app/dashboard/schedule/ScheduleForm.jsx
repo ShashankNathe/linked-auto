@@ -8,11 +8,6 @@ import Link from "next/link";
 import { saveSchedule } from "@/app/actions/databaseActions";
 import { useToast } from "@/components/ui/use-toast";
 import { Textarea } from "@/components/ui/textarea";
-import { Calendar } from "@/components/ui/calendar";
-import { Calendar as CalendarIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
-
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 const ScheduleForm = () => {
   const [date, setDate] = useState();
@@ -20,10 +15,10 @@ const ScheduleForm = () => {
   const { toast } = useToast();
   return (
     <div className="flex justify-center items-center">
-      <Card className="w-11/12 sm:w-[350px]">
+      <Card className="w-full m-5">
         <CardHeader>
-          <CardTitle>Login</CardTitle>
-          <CardDescription>Sign in to your existing account</CardDescription>
+          <CardTitle>Schedule a post</CardTitle>
+          <CardDescription>Schedule a post to be published at a later date and time.</CardDescription>
         </CardHeader>
         <form
           onSubmit={async (e) => {
@@ -48,23 +43,17 @@ const ScheduleForm = () => {
           <CardContent>
             <div className="grid w-full items-center gap-4">
               <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="message">Post content</Label>
-                <Textarea placeholder="Type your post content here." id="message" name="message" required />
+                <Label htmlFor="postContent">Post content</Label>
+                <Textarea placeholder="Type your post content here." id="postContent" name="postContent" required />
               </div>
               <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="password">Password</Label>
-                <Input id="password" type="date" placeholder="Password" name="password" />
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button variant={"outline"} className={cn("w-[280px] justify-start text-left font-normal", !date && "text-muted-foreground")}>
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {date ? date : <span>Pick a date</span>}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0">
-                    <Calendar mode="single" selected={date} onSelect={setDate} initialFocus />
-                  </PopoverContent>
-                </Popover>
+                <Label htmlFor="scheduleDate">Select date and time</Label>
+                <input
+                  type="datetime-local"
+                  className="h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  id="scheduleDate"
+                  name="scheduleDate"
+                />
               </div>
             </div>
           </CardContent>
