@@ -2,6 +2,8 @@
 import { connectToDatabase } from "@/lib/mongodb";
 import { cookies } from "next/headers";
 import { jwtVerify } from "jose";
+import { revalidatePath } from "next/cache";
+import { ObjectId } from "mongodb";
 
 export const saveSchedule = async (formData) => {
   try {
@@ -28,6 +30,7 @@ export const saveSchedule = async (formData) => {
     }
     const { db } = await connectToDatabase();
     const response = await db.collection("schedule").insertOne(postObj);
+    revalidatePath("/dashboard");
     return {
       success: true,
       acknowledged: response.acknowledged,
@@ -54,9 +57,33 @@ export const getScheduledPosts = async () => {
     }
     const { db } = await connectToDatabase();
     const response = await db.collection("schedule").find({ email: payload.email }).toArray();
+
     return {
       success: true,
       data: response,
+    };
+  } catch {
+    return { success: false };
+  }
+};
+
+export const deletePost = async (id) => {
+  try {
+    const cookieStore = cookies();
+    const token = cookieStore.get("token");
+
+    if (!token || !token.value) {
+      return { success: false };
+    }
+    const { payload } = await jwtVerify(token.value, new TextEncoder().encode(process.env.JWT_SECRET));
+    if (!payload.email) {
+      return { success: false };
+    }
+    const { db } = await connectToDatabase();
+    await db.collection("schedule").deleteOne({ _id: ObjectId.createFromHexString(id) });
+    revalidatePath("/dashboard");
+    return {
+      success: true,
     };
   } catch {
     return { success: false };

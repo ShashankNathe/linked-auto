@@ -6,9 +6,12 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
-import { getScheduledPosts } from "../actions/databaseActions";
+import { deletePost, getScheduledPosts } from "../actions/databaseActions";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { DashboardChart } from "@/components/DashboardChart";
+import { revalidatePath } from "next/cache";
+import DeletePost from "@/components/DeletePost";
+export const fetchCache = "force-no-store";
 export default async function Dashboard() {
   const { data } = await getScheduledPosts();
 
@@ -179,6 +182,7 @@ export default async function Dashboard() {
                   </TableHeader>
                   <TableBody>
                     {data.map((d) => {
+                      const id = d._id.toString();
                       return (
                         <TableRow className="" key={d._id}>
                           <TableCell>
@@ -203,9 +207,11 @@ export default async function Dashboard() {
                               </DropdownMenuTrigger>
                               <DropdownMenuContent align="end">
                                 <DropdownMenuItem>
-                                  <Link href={`/dashboard/post/${d._id}`}>View</Link>
+                                  <Link href={`/dashboard/post/${d._id}`} className="w-full text-center">
+                                    View
+                                  </Link>
                                 </DropdownMenuItem>
-                                <DropdownMenuItem className="text-red-500">Delete</DropdownMenuItem>
+                                <DeletePost id={id} />
                               </DropdownMenuContent>
                             </DropdownMenu>
                           </TableCell>

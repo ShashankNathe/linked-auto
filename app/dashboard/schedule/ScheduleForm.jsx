@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -9,11 +9,13 @@ import { Textarea } from "@/components/ui/textarea";
 
 const ScheduleForm = () => {
   const { toast } = useToast();
+  const [loading, setLoading] = useState(false);
   return (
     <div className="w-full mt-10">
       <form
         onSubmit={async (e) => {
           e.preventDefault();
+          setLoading(true);
           const formData = new FormData(e.currentTarget);
           formData.type = "Manual";
           try {
@@ -22,7 +24,6 @@ const ScheduleForm = () => {
               toast({
                 title: "Schedule saved",
                 description: "Post scheduled successfully",
-                variant: "success",
               });
             } else {
               toast({
@@ -38,6 +39,7 @@ const ScheduleForm = () => {
               variant: "destructive",
             });
           }
+          setLoading(false);
         }}
       >
         <div className="grid w-full items-center gap-4">
@@ -56,7 +58,7 @@ const ScheduleForm = () => {
           </div>
         </div>
         <CardFooter className="flex justify-end mt-5 pe-0">
-          <Button>Schedule</Button>
+          <Button disabled={loading}>{loading ? "Scheduling..." : "Schedule"}</Button>
         </CardFooter>
       </form>
     </div>

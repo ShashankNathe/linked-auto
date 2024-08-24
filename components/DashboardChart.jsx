@@ -10,7 +10,6 @@ const chartConfig = {
 };
 
 export function DashboardChart(chartData) {
-  console.log(chartData.chartData);
   return (
     <ChartContainer config={chartConfig}>
       <LineChart
