@@ -89,3 +89,18 @@ export const getProfileData = async (user) => {
   const profileData = await response.json();
   return profileData;
 };
+
+// get linkedin post stats
+
+export const getPostStats = async (user, urn) => {
+  const accessToken = await getAccessToken(user);
+  if (!accessToken) return null;
+  let liUrl = `https://api.linkedin.com/v2/socialActions/${urn}`;
+  const response = await fetch(liUrl, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  const postStats = await response.json();
+  return postStats;
+};
