@@ -14,7 +14,7 @@ export const metadata = {
   site_name: "LinkedAuto",
   locale: "en_US",
   robots: "follow, index",
-  keywords: "linkedin, social media, posts, schedule",
+  keywords: "linkedin, social media, posts, schedule, linkedin posts",
 };
 
 export default function RootLayout({ children }) {
