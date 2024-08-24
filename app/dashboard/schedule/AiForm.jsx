@@ -112,8 +112,9 @@ const AiForm = () => {
           x-chunk="dashboard-03-chunk-1"
           onSubmit={async (e) => {
             e.preventDefault();
+            setLoading2(true);
             const formData = new FormData(e.currentTarget);
-            formData.type = "Ai Generated";
+            formData.append("type", "Ai Generated");
             try {
               const data = await saveSchedule(formData);
               if (data.success) {
@@ -135,6 +136,7 @@ const AiForm = () => {
                 variant: "destructive",
               });
             }
+            setLoading2(false);
           }}
         >
           <div className="grid gap-3">

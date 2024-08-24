@@ -89,3 +89,36 @@ export const deletePost = async (id) => {
     return { success: false };
   }
 };
+
+// update function
+
+export const updatePost = async (id, formData) => {
+  try {
+    const cookieStore = cookies();
+    const token = cookieStore.get("token");
+
+    if (!token || !token.value) {
+      return { success: false };
+    }
+    const { payload } = await jwtVerify(token.value, new TextEncoder().encode(process.env.JWT_SECRET));
+    if (!payload.email) {
+      return { success: false };
+    }
+    const postObj = {
+      content: formData.get("postContent"),
+      scheduleDate: new Date(formData.get("scheduleDate")),
+      status: formData.get("status"),
+    };
+    const { db } = await connectToDatabase();
+    const response = await db.collection("schedule").updateOne({ _id: ObjectId.createFromHexString(id) }, { $set: postObj });
+    revalidatePath("/dashboard");
+    revalidatePath(`/dashboard/post/${id}`);
+    return {
+      success: true,
+      acknowledged: response.acknowledged,
+      modifiedCount: response.modifiedCount,
+    };
+  } catch {
+    return { success: false };
+  }
+};

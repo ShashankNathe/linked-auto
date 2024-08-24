@@ -17,7 +17,7 @@ const ScheduleForm = () => {
           e.preventDefault();
           setLoading(true);
           const formData = new FormData(e.currentTarget);
-          formData.type = "Manual";
+          formData.append("type", "Manual");
           try {
             const data = await saveSchedule(formData);
             if (data.success) {

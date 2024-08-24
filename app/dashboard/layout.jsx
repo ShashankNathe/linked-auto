@@ -35,13 +35,6 @@ const layout = ({ children }) => {
             <SheetContent side="left" className="sm:max-w-xs">
               <nav className="grid gap-6 text-lg font-medium">
                 <div className="h-10"></div>
-                {/* <Link
-                  href="/dashboard"
-                  className="group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base"
-                >
-                  <Package2 className="h-5 w-5 transition-all group-hover:scale-110" />
-                  <span className="sr-only">LinkedAuto</span>
-                </Link> */}
                 <Link href="/" className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground">
                   <Home className="h-5 w-5" />
                   Dashboard
@@ -65,7 +58,6 @@ const layout = ({ children }) => {
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="icon" className="overflow-hidden rounded-full">
                 <Settings />
-                {/* <Image src="/placeholder-user.jpg" width={36} height={36} alt="Avatar" className="overflow-hidden rounded-full" /> */}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -74,13 +66,10 @@ const layout = ({ children }) => {
               <DropdownMenuItem>
                 <Link href="/dashboard/profile">Settings</Link>
               </DropdownMenuItem>
-              {/* <DropdownMenuItem>Support</DropdownMenuItem> */}
               <DropdownMenuSeparator />
-              {/* <form onSubmit={()=>handleLogout()}> */}
               <Link href={"/api/auth/logout"}>
                 <DropdownMenuItem>Logout</DropdownMenuItem>
               </Link>
-              {/* </form> */}
             </DropdownMenuContent>
           </DropdownMenu>
         </header>

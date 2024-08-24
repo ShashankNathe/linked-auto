@@ -1,6 +1,9 @@
 "use server";
 
 import { connectToDatabase } from "@/lib/mongodb";
+import { jwtVerify } from "jose";
+import { ObjectId } from "mongodb";
+import { cookies } from "next/headers";
 
 export const generateAccessToken = async (code, user) => {
   const { db } = await connectToDatabase();
@@ -92,15 +95,42 @@ export const getProfileData = async (user) => {
 
 // get linkedin post stats
 
-export const getPostStats = async (user, urn) => {
-  const accessToken = await getAccessToken(user);
-  if (!accessToken) return null;
-  let liUrl = `https://api.linkedin.com/v2/socialActions/${urn}`;
-  const response = await fetch(liUrl, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
-  const postStats = await response.json();
-  return postStats;
+export const getPostStats = async (id) => {
+  try {
+    const cookieStore = cookies();
+    const token = cookieStore.get("token");
+    if (!token || !token.value) {
+      return null;
+    }
+    const { payload } = await jwtVerify(token.value, new TextEncoder().encode(process.env.JWT_SECRET));
+    if (!payload.email) {
+      return null;
+    }
+    const { db } = await connectToDatabase();
+    const post = await db.collection("schedule").findOne({ _id: ObjectId.createFromHexString(id) });
+    const user = await db.collection("users").findOne({ email: payload.email });
+    const post_id = post.post_id;
+    if (!post_id) return { post: post };
+    const accessToken = await getAccessToken(user);
+    if (!accessToken) return { post: post };
+    let liUrl = `https://api.linkedin.com/v2/socialActions/${post_id}`;
+    const response = await fetch(liUrl, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    const postStats = await response.json();
+    const data = {
+      post: JSON.parse(JSON.stringify(post)),
+    };
+    if (postStats.commentsSummary) {
+      data.comments = postStats.commentsSummary.totalFirstLevelComments;
+    }
+    if (postStats.likesSummary) {
+      data.likes = postStats.likesSummary.totalLikes;
+    }
+    return data;
+  } catch {
+    return null;
+  }
 };

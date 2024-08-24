@@ -8,6 +8,9 @@ import React from "react";
 const DynamicBreadCrumbs = () => {
   const path = usePathname();
   const pathNames = path.split("/").filter((name) => name);
+  if (pathNames.includes("post")) {
+    pathNames.pop();
+  }
   return (
     <Breadcrumb className="hidden md:flex">
       <BreadcrumbList>

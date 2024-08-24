@@ -6,13 +6,28 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
-import { deletePost, getScheduledPosts } from "../actions/databaseActions";
+import { getScheduledPosts } from "../actions/databaseActions";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { DashboardChart } from "@/components/DashboardChart";
-import { revalidatePath } from "next/cache";
 import DeletePost from "@/components/DeletePost";
-export const fetchCache = "force-no-store";
+import { cookies } from "next/headers";
+import NotConnected from "@/components/NotConnected";
+import { getUser } from "@/lib/getUser";
+import { jwtVerify } from "jose";
+import { connectToDatabase } from "@/lib/mongodb";
 export default async function Dashboard() {
+  const cookieStore = cookies();
+  const token = cookieStore.get("token");
+  if (!token || !token.value) return <NotConnected />;
+
+  const { payload } = await jwtVerify(token.value, new TextEncoder().encode(process.env.JWT_SECRET));
+  if (!payload.email) return <NotConnected />;
+  const user = await getUser(token.value);
+  const { db } = await connectToDatabase();
+  const userProperties = await db.collection("user_properties").find({ user_id: user._id }).sort({ createdAt: -1 }).limit(1).toArray();
+  if (!userProperties || !userProperties[0]) return null;
+  const access_token = userProperties[0]?.access_token;
+  if (!access_token) return <NotConnected />;
   const { data } = await getScheduledPosts();
 
   function startOfWeek(date = new Date()) {
@@ -152,7 +167,7 @@ export default async function Dashboard() {
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Link href="/dashboard/schedule">
-                    <Button size="sm" variant="outline" className="h-7 gap-1 text-sm">
+                    <Button size="sm" variant="outline" className=" gap-1 text-sm">
                       <Plus className="h-3.5 w-3.5" />
                       <span className="sr-only sm:not-sr-only">Schedule post</span>
                     </Button>
@@ -177,6 +192,7 @@ export default async function Dashboard() {
                       <TableHead>Content</TableHead>
                       <TableHead className="hidden sm:table-cell">Scheduled Time</TableHead>
                       <TableHead className="">Status</TableHead>
+                      <TableHead className="hidden sm:table-cell">Type</TableHead>
                       <TableHead className="text-right">Action</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -197,6 +213,7 @@ export default async function Dashboard() {
                               {d.status.charAt(0).toUpperCase() + d.status.slice(1)}
                             </Badge>
                           </TableCell>
+                          <TableCell className="hidden sm:table-cell">{d.type ? d.type : "Manual"}</TableCell>
                           <TableCell className="text-right">
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
