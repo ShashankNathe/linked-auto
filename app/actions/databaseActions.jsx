@@ -22,6 +22,10 @@ export const saveSchedule = async (formData) => {
       scheduleDate: new Date(formData.get("scheduleDate")),
       created_at: new Date(),
     };
+    let type = formData.get("type");
+    if (type) {
+      postObj["type"] = type;
+    }
     const { db } = await connectToDatabase();
     const response = await db.collection("schedule").insertOne(postObj);
     return {

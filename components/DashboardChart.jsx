@@ -1,32 +1,21 @@
 "use client";
 
-import { TrendingUp } from "lucide-react";
 import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
-
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-const chartData = [
-  { month: "January", desktop: 186 },
-  { month: "February", desktop: 305 },
-  { month: "March", desktop: 237 },
-  { month: "April", desktop: 73 },
-  { month: "May", desktop: 209 },
-  { month: "June", desktop: 214 },
-];
-
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 const chartConfig = {
   desktop: {
-    label: "Desktop",
+    label: "Posts",
     color: "hsl(var(--chart-1))",
   },
 };
 
-export function DashboardChart() {
+export function DashboardChart(chartData) {
+  console.log(chartData.chartData);
   return (
     <ChartContainer config={chartConfig}>
       <LineChart
         accessibilityLayer
-        data={chartData}
+        data={chartData.chartData}
         margin={{
           left: 12,
           right: 12,

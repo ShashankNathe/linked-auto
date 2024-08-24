@@ -35,6 +35,17 @@ export default async function Dashboard() {
     return result;
   }
 
+  function calculatePercentageChange(current, previous) {
+    if (previous === 0) return current === 0 ? 0 : 100;
+    return ((current - previous) / previous) * 100;
+  }
+
+  function getMonthName(index) {
+    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    return monthNames[index];
+  }
+
+  // Time calculations
   const now = new Date();
   const thisWeekStart = startOfWeek(now);
   const thisMonthStart = startOfMonth(now);
@@ -42,6 +53,7 @@ export default async function Dashboard() {
   const lastWeekStart = startOfWeek(addDays(thisWeekStart, -7));
   const lastMonthStart = startOfMonth(addMonths(thisMonthStart, -1));
 
+  // Filter posts based on timeframes
   const postsThisWeek = data.filter((post) => {
     const publishedAt = new Date(post.published_at);
     return publishedAt >= thisWeekStart && publishedAt < now;
@@ -62,13 +74,39 @@ export default async function Dashboard() {
     return publishedAt >= lastMonthStart && publishedAt < thisMonthStart;
   });
 
-  function calculatePercentageChange(current, previous) {
-    if (previous === 0) return current === 0 ? 0 : 100; // Handle division by zero
-    return ((current - previous) / previous) * 100;
-  }
-
+  // Calculate percentage changes
   const weekChange = calculatePercentageChange(postsThisWeek.length, postsLastWeek.length);
   const monthChange = calculatePercentageChange(postsThisMonth.length, postsLastMonth.length);
+
+  // Generate chart data for the last 6 months
+  const currentMonthIndex = now.getMonth();
+  const startMonthIndex = (currentMonthIndex - 5 + 12) % 12;
+  const startYear = now.getFullYear() - (currentMonthIndex < 5 ? 1 : 0);
+
+  const chartData = Array.from({ length: 6 }, (_, index) => {
+    const monthIndex = (startMonthIndex + index) % 12;
+    const yearOffset = Math.floor((startMonthIndex + index) / 12);
+    const year = startYear + yearOffset;
+
+    return {
+      month: `${getMonthName(monthIndex)} ${year}`,
+      desktop: 0,
+    };
+  });
+
+  // Populate chart data
+  data.forEach((post) => {
+    const publishedAt = new Date(post.published_at);
+    const postMonthIndex = publishedAt.getMonth();
+    const postYear = publishedAt.getFullYear();
+
+    chartData.forEach((data, index) => {
+      const [monthName, year] = data.month.split(" ");
+      if (getMonthName(postMonthIndex) === monthName && postYear.toString() === year) {
+        chartData[index].desktop += 1;
+      }
+    });
+  });
 
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
@@ -144,7 +182,7 @@ export default async function Dashboard() {
                       return (
                         <TableRow className="" key={d._id}>
                           <TableCell>
-                            <div className="font-medium">{d.content}</div>
+                            {d.content && <div className="font-medium">{d.content && d.content.length < 50 ? d.content : d.content.substring(0, 50) + "..."}</div>}
                           </TableCell>
                           <TableCell className="hidden sm:table-cell">{new Date(d.scheduleDate).toLocaleString()}</TableCell>
                           <TableCell className="">
@@ -152,7 +190,7 @@ export default async function Dashboard() {
                               className={`text-xs ${d.status == "scheduled" ? "" : d.status == "published" ? "bg-green-600 hover:bg-green-600" : ""}`}
                               variant={d.status == "paused" ? "destructive" : "secondary"}
                             >
-                              {d.status}
+                              {d.status.charAt(0).toUpperCase() + d.status.slice(1)}
                             </Badge>
                           </TableCell>
                           <TableCell className="text-right">
@@ -164,7 +202,9 @@ export default async function Dashboard() {
                                 </Button>
                               </DropdownMenuTrigger>
                               <DropdownMenuContent align="end">
-                                <DropdownMenuItem>View</DropdownMenuItem>
+                                <DropdownMenuItem>
+                                  <Link href={`/dashboard/post/${d._id}`}>View</Link>
+                                </DropdownMenuItem>
                                 <DropdownMenuItem className="text-red-500">Delete</DropdownMenuItem>
                               </DropdownMenuContent>
                             </DropdownMenu>
@@ -190,10 +230,10 @@ export default async function Dashboard() {
             </div>
           </CardHeader>
           <CardContent className="p-6 py-10 text-sm">
-            <DashboardChart />
+            <DashboardChart chartData={chartData} />
           </CardContent>
           <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">
-            <div className="leading-none text-muted-foreground">Showing total posts for the last 30 days</div>
+            <div className="leading-none text-muted-foreground">Showing total posts for the last 6 months</div>
           </CardFooter>
         </Card>
       </div>
