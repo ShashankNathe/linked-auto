@@ -1,8 +1,6 @@
 import { getPostStats } from "@/app/actions/linkedinActions";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
-import { Textarea } from "@/components/ui/textarea";
 import { MessageCircle, ThumbsUp } from "lucide-react";
 import React from "react";
 import UpdateForm from "./UpdateForm";

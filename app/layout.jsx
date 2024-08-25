@@ -15,6 +15,20 @@ export const metadata = {
   locale: "en_US",
   robots: "follow, index",
   keywords: "linkedin, social media, posts, schedule, linkedin posts",
+  openGraph: {
+    title: "LinkedAuto",
+    description: "Manage your LinkedIn posts with ease",
+    url: "https://linked-auto.vercel.app",
+    type: "website",
+    images: [
+      {
+        url: "/logo.png",
+        width: 390,
+        height: 441,
+        alt: "LinkedAuto Logo",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({ children }) {

@@ -7,7 +7,7 @@ const NotConnected = () => {
       <div className="text-center">
         <Link
           href={
-            "https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=86zarhofajs6if&redirect_uri=http://localhost:3000/dashboard/profile&state=foobar123&scope=profile%20email%20w_member_social%20r_basicprofile%20r_organization_social"
+            "https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=86zarhofajs6if&redirect_uri=https://linked-auto.vercel.app/dashboard/profile&state=foobar123&scope=profile%20email%20w_member_social%20r_basicprofile%20r_organization_social"
           }
         >
           <h1 className="text-4xl font-bold text-primary">Linkedin Account Not Connected</h1>
