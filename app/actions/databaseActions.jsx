@@ -20,7 +20,7 @@ export const saveSchedule = async (formData) => {
 
     const localDateTimeString = formData.get("scheduleDate"); // e.g., "2024-08-26T15:56"
     const localDate = new Date(localDateTimeString);
-    const utcDate = new Date(localDate.getTime() - localDate.getTimezoneOffset() * 60000);
+    const utcDate = new Date(localDate.getTime() + localDate.getTimezoneOffset() * 60000);
 
     const postObj = {
       email: payload.email,
@@ -109,9 +109,10 @@ export const updatePost = async (id, formData) => {
     if (!payload.email) {
       return { success: false };
     }
+
     const localDateTimeString = formData.get("scheduleDate"); // e.g., "2024-08-26T15:56"
     const localDate = new Date(localDateTimeString);
-    const utcDate = new Date(localDate.getTime() - localDate.getTimezoneOffset() * 60000);
+    const utcDate = new Date(localDate.getTime() + localDate.getTimezoneOffset() * 60000);
 
     const postObj = {
       content: formData.get("postContent"),
