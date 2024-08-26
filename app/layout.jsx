@@ -7,6 +7,7 @@ import { Toaster } from "@/components/ui/toaster";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
+  metadataBase: new URL("https://linked-auto.vercel.app"),
   title: "LinkedAuto",
   description: "Manage your LinkedIn posts with ease",
   image: "/logo.png",

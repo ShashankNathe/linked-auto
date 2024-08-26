@@ -204,7 +204,7 @@ export default async function Dashboard() {
                           <TableCell>
                             {d.content && <div className="font-medium">{d.content && d.content.length < 50 ? d.content : d.content.substring(0, 50) + "..."}</div>}
                           </TableCell>
-                          <TableCell className="hidden sm:table-cell">{new Date(d.scheduleDate).toLocaleString()}</TableCell>
+                          <TableCell className="hidden sm:table-cell">{new Date(d.scheduleDate).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}</TableCell>
                           <TableCell className="">
                             <Badge
                               className={`text-xs ${d.status == "scheduled" ? "" : d.status == "published" ? "bg-green-600 hover:bg-green-600" : ""}`}
