@@ -29,7 +29,7 @@ export default async function Home() {
           </nav>
           <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
             <div className="ml-auto flex-1 sm:flex-initial"></div>
-            <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
+            <nav className="flex-col gap-6 text-lg font-medium flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
               {token ? (
                 <Link href="/dashboard" className="text-muted-foreground transition-colors hover:text-foreground">
                   Dashboard
