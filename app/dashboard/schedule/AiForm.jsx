@@ -114,6 +114,16 @@ const AiForm = () => {
             e.preventDefault();
             setLoading2(true);
             const formData = new FormData(e.currentTarget);
+            let postContent = formData.get("postContent");
+            if (postContent.length > 3000) {
+              toast({
+                title: "Failed",
+                description: "Post content should be less than 3000 characters",
+                variant: "destructive",
+              });
+              setLoading(false);
+              return;
+            }
             formData.append("type", "Ai Generated");
             try {
               const data = await saveSchedule(formData);

@@ -21,7 +21,7 @@ export async function generatePost(formData) {
   const postFormat = formData.get("postFormat");
   const userPrompt = formData.get("prompt");
 
-  const finalPrompt = `Generate a linkedin post of ${maxWords} words in ${tone} tone. The post should be in ${postFormat} format. ${userPrompt}`;
+  const finalPrompt = `Generate a linkedin post of ${maxWords} words in ${tone} tone. The post should be in ${postFormat} format. ${userPrompt}. The post should be less than 3000 characters`;
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });

@@ -18,6 +18,16 @@ const UpdateForm = ({ post }) => {
         const posId = post._id.toString();
         setLoading(true);
         const formData = new FormData(e.currentTarget);
+        let postContent = formData.get("postContent");
+        if (postContent.length > 3000) {
+          toast({
+            title: "Update failed",
+            description: "Post content should be less than 3000 characters",
+            variant: "destructive",
+          });
+          setLoading(false);
+          return;
+        }
         try {
           const data = await updatePost(posId, formData);
           if (data.success) {
@@ -60,7 +70,7 @@ const UpdateForm = ({ post }) => {
           />
         </div>
         <div className="flex flex-col space-y-1.5">
-          <Label htmlFor="status">Select date and time</Label>
+          <Label htmlFor="status">Status</Label>
           <Select name="status" id="status" required defaultValue={post.status}>
             <SelectTrigger>
               <SelectValue placeholder="Format" />
