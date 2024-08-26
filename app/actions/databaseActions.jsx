@@ -18,15 +18,13 @@ export const saveSchedule = async (formData) => {
       return { success: false };
     }
 
-    const localDateTimeString = formData.get("scheduleDate"); // e.g., "2024-08-26T15:56"
+    const localDateTimeString = formData.get("scheduleDate");
     const localDate = new Date(localDateTimeString);
-    const utcDate = new Date(localDate.getTime() + localDate.getTimezoneOffset() * 60000);
-
     const postObj = {
       email: payload.email,
       content: formData.get("postContent"),
       status: "scheduled",
-      scheduleDate: utcDate,
+      scheduleDate: localDate,
       created_at: new Date(),
     };
     let type = formData.get("type");
@@ -112,11 +110,10 @@ export const updatePost = async (id, formData) => {
 
     const localDateTimeString = formData.get("scheduleDate"); // e.g., "2024-08-26T15:56"
     const localDate = new Date(localDateTimeString);
-    const utcDate = new Date(localDate.getTime() + localDate.getTimezoneOffset() * 60000);
 
     const postObj = {
       content: formData.get("postContent"),
-      scheduleDate: utcDate,
+      scheduleDate: localDate,
       status: formData.get("status"),
     };
     const { db } = await connectToDatabase();
